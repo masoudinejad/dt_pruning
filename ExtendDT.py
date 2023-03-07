@@ -158,7 +158,8 @@ class ext_dt:
     def getRCFactor(self):
         n_nodes = self.n_all_nodes
         samples = self.base_dt.tree_.n_node_samples
-        RC_node = np.zeros(shape = n_nodes, dtype = np.int64)
+        # RC_node = np.zeros(shape = n_nodes, dtype = np.int64)
+        RC_node = copy.copy(samples)
         # ----- Are leafs already detected?
         if not hasattr(self, "is_leaf"):
             self.findLeafs()
@@ -174,13 +175,25 @@ class ext_dt:
                 while current_parent != -1:
                     RC_node[current_parent] += samples[node_ind]
                     current_parent = parent[current_parent] # get the next parent node id
-        # Root node directly reaches parent -1 and is not added to itself:
-        RC_node[0] += samples[0]
         RC_branch = RC_node / samples
         self.RC_node = RC_node
         self.RC_branch = RC_branch
         self.DT_APD = RC_branch[0]
         
+    def get_APD(self):
+        if not hasattr(self, "DT_APD"):
+            self.getRCFactor()
+        return self.DT_APD
+
+    def get_branchSamples(self, node_id):
+        if not hasattr(self, "RC_node"):
+            self.getRCFactor()
+        return self.RC_node[node_id]
+
+    def get_branchAPD(self, node_id):
+        if not hasattr(self, "RC_branch"):
+            self.getRCFactor()
+        return self.RC_branch[node_id]
     # # ========== Calculate Resource Cost (RC) factors
     # def getRCFactor(self):
     #     n_nodes = self.n_all_nodes
