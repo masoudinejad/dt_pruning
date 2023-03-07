@@ -158,7 +158,7 @@ class ext_dt:
     def getRCFactor(self):
         n_nodes = self.n_all_nodes
         samples = self.base_dt.tree_.n_node_samples
-        RC_node = np.zeros(shape = n_nodes, dtype = np.float64)
+        RC_node = np.zeros(shape = n_nodes, dtype = np.int64)
         # ----- Are leafs already detected?
         if not hasattr(self, "is_leaf"):
             self.findLeafs()
@@ -169,17 +169,44 @@ class ext_dt:
         parent = self.parent
         # ----- From leaves go upward and calculate the PC
         for node_ind in range (n_nodes):         
-            if is_leaf[node_ind]:
+            if not is_leaf[node_ind]:
                 current_parent = parent[node_ind]
-                upward_length = 1
                 while current_parent != -1:
-                    RC_node[current_parent] = RC_node[current_parent] + upward_length * samples[node_ind]/samples[current_parent]
+                    RC_node[current_parent] += samples[node_ind]
                     current_parent = parent[current_parent] # get the next parent node id
-                    upward_length = upward_length + 1
-            RC_branch = RC_node * samples / samples[0]
+        # Root node directly reaches parent -1 and is not added to itself:
+        RC_node[0] += samples[0]
+        RC_branch = RC_node / samples
         self.RC_node = RC_node
         self.RC_branch = RC_branch
         self.DT_APD = RC_branch[0]
+        
+    # # ========== Calculate Resource Cost (RC) factors
+    # def getRCFactor(self):
+    #     n_nodes = self.n_all_nodes
+    #     samples = self.base_dt.tree_.n_node_samples
+    #     RC_node = np.zeros(shape = n_nodes, dtype = np.float64)
+    #     # ----- Are leafs already detected?
+    #     if not hasattr(self, "is_leaf"):
+    #         self.findLeafs()
+    #     is_leaf = self.is_leaf
+    #     # ----- Are parents already known?
+    #     if not hasattr(self, "parent"):
+    #         self.findParents()
+    #     parent = self.parent
+    #     # ----- From leaves go upward and calculate the PC
+    #     for node_ind in range (n_nodes):         
+    #         if is_leaf[node_ind]:
+    #             current_parent = parent[node_ind]
+    #             upward_length = 1
+    #             while current_parent != -1:
+    #                 RC_node[current_parent] = RC_node[current_parent] + upward_length * samples[node_ind]/samples[current_parent]
+    #                 current_parent = parent[current_parent] # get the next parent node id
+    #                 upward_length = upward_length + 1
+    #         RC_branch = RC_node * samples / samples[0]
+    #     self.RC_node = RC_node
+    #     self.RC_branch = RC_branch
+    #     self.DT_APD = RC_branch[0]
     
     # ========== Calculate Absolute Cost factors
     def getAbsCostFactor(self):
