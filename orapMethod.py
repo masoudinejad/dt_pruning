@@ -125,10 +125,10 @@ def get_ORAP_sequence(dt_base, **kwargs):
     return ORAP_base_sequence
 
 #>A function to remove a series of nodes from a base DT
-def series_prune(xdt, node_series):
-    pruned_xdt = copy.deepcopy(xdt)
+def series_prune(base_dt, node_series):
+    pruned_xdt = ext_dt(copy.deepcopy(base_dt))
     #* Step by step remove branches
     for prune_node in node_series:
         current_dt = pruned_xdt.removeBranch(prune_node)
         pruned_xdt = ext_dt(current_dt)
-    return pruned_xdt
+    return pruned_xdt.base_dt
