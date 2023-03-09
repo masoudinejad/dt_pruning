@@ -121,6 +121,8 @@ def get_ORAP_sequence(dt_base, **kwargs):
     ORAP_base_sequence.cost.insert(0, 0)
     ORAP_base_sequence.miss.insert(0, 0)
     ORAP_base_sequence.removed.insert(0, [])
+    
+    return ORAP_base_sequence
 
 #>A function to remove a series of nodes from a base DT
 def series_prune(xdt, node_series):

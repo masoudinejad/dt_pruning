@@ -35,11 +35,11 @@ class PruneSequence:
     # > show the content of the sequence
     def ShowSequence(self):
         print(f"--------------------")
-        print(f"Costs:\t{self.cost}")
+        print(f"D(APD):\t{self.cost}")
         print(f"Miss.:\t{self.miss}")
         print(f"Rmvd.:\t{self.removed}")
-        print(f"APD:\t{self.APD}")
-        print(f"Imp.:\t{self.impurity}")
+        # print(f"APD:\t{self.APD}")
+        # print(f"Imp.:\t{self.impurity}")
         # print(f"Stat:\t{self.optimized}")
         # print(f"Sort:\t{self.sorted}")
         print(f"--------------------")
