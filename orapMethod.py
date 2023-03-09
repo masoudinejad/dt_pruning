@@ -1,5 +1,5 @@
 from ExtendDT import ext_dt
-import copy
+from Sequence import *
 
 #> Find the optimal sequence for a single node when its children are optimized
 def PruneOptimalSingle(xdt, main_seq, root_id):
