@@ -175,6 +175,9 @@ class ext_dt:
                 while current_parent != -1:
                     RC_node[current_parent] += samples[node_ind]
                     current_parent = parent[current_parent] # get the next parent node id
+        # Border case when the root is a leaf:
+        if is_leaf[0]:
+            RC_node[0] = 0
         RC_branch = RC_node / samples
         self.RC_node = RC_node
         self.RC_branch = RC_branch
